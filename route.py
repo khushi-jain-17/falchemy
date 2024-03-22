@@ -1,14 +1,9 @@
-
-from flask import Blueprint, request, jsonify
-# from flask_sqlalchemy import SQLAlchemy
-from app import db 
+from flask import request, jsonify, Blueprint
+from models import Blog 
 from datetime import datetime
-from app import Blog
+from __init__ import db 
+
 my_routes = Blueprint("my_routes", __name__)
-
-
-
-
 
 @my_routes.route("/get", methods=["GET"])
 def get():
@@ -56,3 +51,11 @@ def delete(id):
     db.session.delete(blog_to_delete)
     db.session.commit()
     return jsonify({'message': 'blog deleted'})
+
+
+# @my_routes.route("/blog/<int:page_num>", methods=['GET'])
+# def blog(page_num):
+#     blogs = Blog.query.paginate(per_page=20, page=page_num, error_out=True)
+#     return blogs 
+
+
