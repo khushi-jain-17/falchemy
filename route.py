@@ -19,11 +19,18 @@ def get():
         output.append(blog_data)
     return jsonify({"blogs": output})
 
-
-@my_routes.route("/get_id", methods=['GET'])
-def get_id():
-    blog = Blog.query.get_or_404(id)
-    return jsonify({"blog": blog})
+@my_routes.route("/get_id/<int:id>", methods=['GET'])
+def get_id(id):
+    blogs = Blog.query.get_or_404(id)
+    output = []
+    blog_data = {
+        "id": blogs.id,
+        "title": blogs.title,
+        "author": blogs.author,
+        "date_posted": blogs.date_posted
+    }
+    output.append(blog_data)
+    return jsonify({"blogs": output})
 
 
 @my_routes.route("/create", methods=['POST'])
