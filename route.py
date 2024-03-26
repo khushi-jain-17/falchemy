@@ -59,10 +59,18 @@ def delete(id):
     db.session.commit()
     return jsonify({'message': 'blog deleted'})
 
-
-# @my_routes.route("/blog/<int:page_num>", methods=['GET'])
-# def blog(page_num):
-#     blogs = Blog.query.paginate(per_page=20, page=page_num, error_out=True)
-#     return blogs 
+@my_routes.route("/blog/<int:page_num>", methods=['GET'])
+def blog(page_num):
+    blogs = Blog.query.paginate(per_page=17, page=page_num, error_out=True)
+    output = []
+    for p in blogs:
+        blog_data = {
+            "id": p.id,
+            "title": p.title,
+            "author": p.author,
+            "date_posted": p.date_posted
+        }
+        output.append(blog_data)
+    return jsonify({"blogs": output})
 
 
