@@ -1,9 +1,10 @@
 from flask import request, jsonify, Blueprint
-from models import Blog 
+from models import Blog
 from datetime import datetime
-from __init__ import db 
+from __init__ import db
 
 my_routes = Blueprint("my_routes", __name__)
+
 
 @my_routes.route("/get", methods=["GET"])
 def get():
@@ -18,6 +19,7 @@ def get():
         }
         output.append(blog_data)
     return jsonify({"blogs": output})
+
 
 @my_routes.route("/get_id/<int:id>", methods=['GET'])
 def get_id(id):
@@ -59,6 +61,7 @@ def delete(id):
     db.session.commit()
     return jsonify({'message': 'blog deleted'})
 
+
 @my_routes.route("/blog/<int:page_num>", methods=['GET'])
 def blog(page_num):
     blogs = Blog.query.paginate(per_page=17, page=page_num, error_out=True)
@@ -74,3 +77,20 @@ def blog(page_num):
     return jsonify({"blogs": output})
 
 
+@my_routes.route("/blogs", methods=['GET'])
+def myblog():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    blogs = Blog.query.paginate(
+        page=page, per_page=per_page, error_out=True
+    )
+    output = []
+    for p in blogs:
+        blog_data = {
+            "id": p.id,
+            "title": p.title,
+            "author": p.author,
+            "date_posted": p.date_posted
+        }
+        output.append(blog_data)
+    return jsonify({"blogs": output})
